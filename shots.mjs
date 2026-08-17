@@ -22,7 +22,7 @@ await sleep(2200);
 /* walk the page so every reveal fires, then come back and shoot each stop */
 const height = await page.evaluate(() => document.body.scrollHeight);
 for (let y = 0; y < height; y += 700) {
-  await page.evaluate((v) => window.scrollTo(0, v), y);
+  await page.evaluate((v) => (window.lenis? window.lenis.scrollTo(v,{immediate:true}) : window.scrollTo(0,v)), y);
   await sleep(220);
 }
 await page.evaluate(() => window.scrollTo(0, 0));
@@ -40,7 +40,7 @@ const stops = [
 ];
 
 for (const [file, y] of stops) {
-  await page.evaluate((v) => window.scrollTo(0, v), y);
+  await page.evaluate((v) => (window.lenis? window.lenis.scrollTo(v,{immediate:true}) : window.scrollTo(0,v)), y);
   await sleep(900);
   await page.screenshot({ path: file });
 }

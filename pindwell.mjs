@@ -9,7 +9,7 @@ await sleep(1500);
 const geo=await p.evaluate(()=>{const r=document.querySelector('.pc-pin').getBoundingClientRect();return{top:Math.round(r.top+scrollY),h:Math.round(r.height)};});
 const seen={};
 for(let y=geo.top; y<geo.top+geo.h; y+=60){
-  await p.evaluate((v)=>window.scrollTo(0,v), y);
+  await p.evaluate((v)=>(window.lenis? window.lenis.scrollTo(v,{immediate:true}) : window.scrollTo(0,v)), y);
   await sleep(45);
   const st=await p.evaluate(()=>{
     const s=document.querySelector('[data-stage]');

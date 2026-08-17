@@ -208,3 +208,46 @@
 
   steps.forEach(function (s) { io.observe(s); });
 })();
+
+/* ---------- smooth scrolling ---------------------------------------
+   Lenis 1.1.20, vendored at public/lenis.js.
+
+   It interpolates the REAL scroll position (native scrollTo) rather than
+   transforming a wrapper, which is the only reason the rest of this page
+   still works underneath it: position:sticky keeps pinning, CSS
+   scroll-timelines keep scrubbing, and every IntersectionObserver keeps
+   firing. A transform-based smooth-scroll library would break all three.
+
+   Nested scrollers need data-lenis-prevent or the wheel is swallowed. */
+(function () {
+  if (typeof Lenis === 'undefined') return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var lenis = new Lenis({
+    lerp: 0.085,          // lower is smoother and heavier
+    wheelMultiplier: 1,
+    syncTouch: false,     // leave native momentum alone on touch
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  /* anchors: Lenis does not intercept them, and scroll-margin-top is a native
+     scroll feature it does not read, so the bar offset is passed explicitly. */
+  var BAR = 78;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href');
+    if (!id || id === '#') return;
+    var target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: -BAR });
+  });
+
+  window.lenis = lenis;
+})();

@@ -422,6 +422,7 @@ ${card({
   <p class="pc-label">${esc(copy.foot.legal)}</p>
 </footer>
 
+<script src="lenis.js" defer></script>
 <script src="app.js" defer fetchpriority="high"></script>
 </body>
 </html>`;

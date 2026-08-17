@@ -12,9 +12,9 @@ const geo=await p.evaluate(()=>{
   return {top:Math.round(r.top+scrollY),height:Math.round(r.height),doc:document.body.scrollHeight};
 });
 console.log('pin geometry', JSON.stringify(geo));
-const stops=[0.12,0.45,0.8];
+const stops=[0.10,0.38,0.64];
 for (let i=0;i<stops.length;i++){
-  await p.evaluate((y)=>window.scrollTo(0,y), Math.round(geo.top+geo.height*stops[i]));
+  await p.evaluate((y)=>(window.lenis? window.lenis.scrollTo(y,{immediate:true}) : window.scrollTo(0,y)), Math.round(geo.top+geo.height*stops[i]));
   await sleep(1100);
   const st=await p.evaluate(()=>({
     active:document.querySelector('[data-stage]').getAttribute('data-active'),

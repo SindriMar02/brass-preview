@@ -487,7 +487,8 @@ a { color: inherit; }
    Full-bleed opening, pinned hand-off, and the motion layer
    ============================================================ */
 
-html { scroll-behavior: smooth; }
+/* Lenis drives scrolling; CSS smooth-scroll would fight its interpolation */
+html { scroll-behavior: auto; }
 body { padding: 0; }
 
 /* everything except the hero keeps the inset gutter */
