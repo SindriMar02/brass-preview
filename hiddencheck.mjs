@@ -1,0 +1,10 @@
+import puppeteer from 'puppeteer-core';
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox']});
+const p=await b.newPage();
+await p.setViewport({width:390,height:844,isMobile:true,hasTouch:true});
+await p.goto((process.env.BASE||'http://localhost:8762')+'/',{waitUntil:'networkidle0'});
+await new Promise(r=>setTimeout(r,1500));
+const v=await p.evaluate(()=>{const el=document.querySelector('.pc-pin__foot');const cs=getComputedStyle(el);return {display:cs.display, visible: el.offsetParent!==null};});
+console.log('pin footnote on mobile:', JSON.stringify(v));
+await b.close();

@@ -1085,3 +1085,37 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   .pc-pin__panel .pc-row { align-items: start; }
   .pc-pin__panel .pc-row__name { font-size: 0.88rem; }
 }
+
+/* ---------- mobile audit fixes --------------------------------------
+   Measured on the deployed site at 390 and 360:
+     - micro-labels rendered at 9.9px, too small to read on a phone
+     - nav and footer links were 11px tall, far under a 44px tap target
+   Type goes up and the hit areas are padded out, without moving the layout. */
+@media (max-width: 900px) {
+  :root { --label-size: 0.8rem; --label-track: 0.13em; }
+
+  .pc-bar__nav a,
+  .pc-chrome__list a,
+  .pc-foot a {
+    display: inline-block;
+    padding-block: 14px;          /* 11px of text becomes a 39px+ target */
+    min-height: 44px;
+    line-height: 1.25;
+  }
+  .pc-chrome__list { gap: 2px 14px; }
+  .pc-foot p, .pc-foot address { line-height: 1.5; }
+
+  .pc-action { padding: 15px 22px; min-height: 48px; }
+  .pc-bar__cta { padding: 13px 18px; min-height: 44px; }
+  .pc-field button { min-height: 44px; padding: 12px 6px; }
+  .pc-field input { min-height: 44px; font-size: 16px; }  /* 16px stops iOS zooming on focus */
+}
+
+/* the row and hero-fact type carry their own sizes, so the mobile bump has to
+   reach them too: 9.6px descriptions are not readable at arm's length */
+@media (max-width: 900px) {
+  .pc-hero__fact { font-size: 0.78rem; line-height: 1.6; }
+  .pc-row__note { font-size: 0.76rem; letter-spacing: 0.05em; }
+  .pc-row__price { font-size: 0.82rem; }
+  .pc-grid dt, .pc-rows__head { font-size: 0.76rem; }
+}
