@@ -1036,3 +1036,49 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   letter-spacing: 0.22em;
 }
 .pc-load__num::after { content: "%"; }
+
+/* ---------- the prototype disclosure --------------------------------
+   This is an unofficial concept on a URL that is not theirs. It says so in
+   the footer, in their language, and their kt/VSK is deliberately NOT
+   reproduced here: printing it would read as the real site. */
+.pc-foot__note { max-width: 44ch; line-height: 1.7; opacity: 0.72; }
+
+/* ---------- the pinned stage on a phone -----------------------------
+   Icelandic dish names wrap to two and three lines at 360px, so a course
+   genuinely cannot always fit the stage. Two answers: show only the course
+   being read, and let the panel scroll when it must. */
+@media (max-width: 900px) {
+  .pc-pin__titles { grid-auto-flow: row; gap: 0; overflow: visible; }
+  .pc-pin__title { display: none; }
+  .pc-pin__stage[data-active="0"] [data-title="0"],
+  .pc-pin__stage[data-active="1"] [data-title="1"],
+  .pc-pin__stage[data-active="2"] [data-title="2"] { display: block; }
+  .pc-pin__title .pc-label { display: block; margin-top: 4px; }
+
+  .pc-pin__panels { min-height: 0; height: 100%; }
+  .pc-pin__panel {
+    overflow-y: auto;              /* paired with data-lenis-prevent */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    max-height: 100%;
+  }
+  .pc-pin__panel .pc-rows { gap: 9px; }
+  .pc-pin__panel .pc-row { padding-bottom: 8px; }
+}
+
+/* on a phone the panel should FILL the space under the course title, not
+   centre itself in it and hang off the bottom of the stage */
+@media (max-width: 900px) {
+  .pc-pin__panel {
+    top: 0;
+    transform: none;
+    translate: 0 12px;
+    height: 100%;
+  }
+  .pc-pin__stage[data-active="0"] [data-panel="0"],
+  .pc-pin__stage[data-active="1"] [data-panel="1"],
+  .pc-pin__stage[data-active="2"] [data-panel="2"] { transform: none; translate: 0 0; }
+  .pc-pin__body { grid-template-rows: auto minmax(0, 1fr); }
+  .pc-pin__panel .pc-row { align-items: start; }
+  .pc-pin__panel .pc-row__name { font-size: 0.88rem; }
+}

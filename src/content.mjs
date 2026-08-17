@@ -299,6 +299,7 @@ export const COPY = {
       { label: 'Facebook', href: 'https://www.facebook.com/brassiceland' },
       { label: 'Panta borð', href: 'https://www.dineout.is/brass?isolation=true&lng=en' },
     ],
-    legal: 'Kt. 610417-0780 · VSK 128393',
+    credit: 'Hugmynd að endurhönnun. SNDR Studio.',
+    legal: 'Óopinber hugmyndavinna, ekki í eigu eða á vegum Brass Kitchen & Bar.',
   },
 };
