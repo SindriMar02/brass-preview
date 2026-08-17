@@ -272,7 +272,7 @@ ${sheet({
           <div class="pc-pin__panels">
             ${copy.menu.sections
               .map(
-                (sec, i) => `<div class="pc-pin__panel" data-panel="${i}" data-lenis-prevent>
+                (sec, i) => `<div class="pc-pin__panel" data-panel="${i}">
                   <div class="pc-sheet__head">
                     <p class="pc-label">${esc(copy.menu.eyebrow)}</p>
                     <p class="pc-label">${esc(copy.menu.currency)}</p>

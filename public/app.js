@@ -254,3 +254,26 @@
 
   window.lenis = lenis;
 })();
+
+/* ---------- nested scrollers, only where they exist -----------------
+   data-lenis-prevent stops Lenis handling the wheel inside an element. That
+   is required when the element really scrolls, and harmful when it does not:
+   a prevented element with nothing to scroll swallows the gesture. So the
+   attribute is applied at runtime, only to panels that actually overflow,
+   and re-evaluated whenever the viewport changes. */
+(function () {
+  var panels = document.querySelectorAll('.pc-pin__panel');
+  if (!panels.length) return;
+
+  function sync() {
+    panels.forEach(function (el) {
+      var overflows = el.scrollHeight - el.clientHeight > 4;
+      if (overflows) el.setAttribute('data-lenis-prevent', '');
+      else el.removeAttribute('data-lenis-prevent');
+    });
+  }
+
+  sync();
+  window.addEventListener('resize', sync, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+})();

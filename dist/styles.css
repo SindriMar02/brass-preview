@@ -1059,7 +1059,10 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   .pc-pin__panel {
     overflow-y: auto;              /* paired with data-lenis-prevent */
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    /* NEVER `overscroll-behavior: contain` here. This panel fills a phone
+       screen, so containing the scroll traps the finger: once the panel hits
+       its end the page cannot move at all. Chaining is the whole point. */
+    overscroll-behavior: auto;
     max-height: 100%;
   }
   .pc-pin__panel .pc-rows { gap: 9px; }
