@@ -1,0 +1,16 @@
+import puppeteer from 'puppeteer-core';
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox','--force-color-profile=srgb']});
+const p=await b.newPage();
+await p.setViewport({width:1440,height:900,deviceScaleFactor:1});
+const client=await p.target().createCDPSession();
+await client.send('Network.enable');
+await client.send('Network.emulateNetworkConditions',{offline:false,latency:120,downloadThroughput:900*1024/8,uploadThroughput:500*1024/8});
+p.goto('http://localhost:8762/',{waitUntil:'domcontentloaded'}).catch(()=>{});
+await sleep(700);
+await p.screenshot({path:'_shot-00-loading.png'});
+await sleep(400);
+await p.screenshot({path:'_shot-00b-loading.png'});
+await b.close();
+console.log('loader shots saved');
