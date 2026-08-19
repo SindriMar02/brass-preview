@@ -163,6 +163,9 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <body>
 <a class="pc-skip" href="#main">Beint í efni</a>
 
+<!-- THE AWNING — first element in flow, sticky into the iOS status strip. -->
+<div class="pc-awning" aria-hidden="true"></div>
+
 <div class="pc-load" data-load role="status" aria-live="polite" aria-label="Hleð">
   <div class="pc-load__inner">
     <span class="pc-load__mark">${LOCKUP}</span>

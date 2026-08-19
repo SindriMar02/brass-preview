@@ -171,20 +171,9 @@
   }
 })();
 
-/* the slim bar arrives once the hero is behind you */
-(function () {
-  var bar = document.querySelector('[data-bar]');
-  /* the hero is sticky, so its own rect never leaves the viewport. A zero-height
-     sentinel sitting directly below it is what actually crosses the top edge. */
-  var sentinel = document.querySelector('[data-sentinel]');
-  if (!bar || !sentinel || !('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      bar.classList.toggle('is-on', e.boundingClientRect.top <= 0 && !e.isIntersecting);
-    });
-  }, { threshold: 0 });
-  io.observe(sentinel);
-})();
+/* The bar is constant — fixed glass from first paint, never revealed, never
+   hidden. The sentinel observer that used to slide it in is gone on purpose;
+   see the mobile chrome standard. Do not add one back. */
 
 /* the pinned course sequence: three spacer steps decide which course is lit */
 (function () {

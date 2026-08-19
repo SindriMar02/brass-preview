@@ -56,8 +56,12 @@ body {
   font-weight: 400;
   font-size: 16px;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip; /* NEVER hidden — hidden kills every sticky descendant */
 }
+
+/* Safari 26 samples fixed edge elements' background-color for the status and
+   home-indicator strips and falls back to BODY's. Both are the ground. */
+html, body { background-color: var(--ground); }
 
 img { display: block; max-width: 100%; }
 a { color: inherit; }
@@ -578,7 +582,30 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 
 .pc-sentinel { height: 1px; margin: 0; }
 
-/* ---------- the slim bar that arrives after the hero -------------- */
+/* ---------- THE AWNING ------------------------------------------------
+   First element in flow. A fixed element paints ZERO pixels above the layout
+   viewport; the iOS status-bar / Dynamic Island strip renders the SCROLLING
+   document, and position:sticky lives in that layer. Stuck at top:-100px it
+   rests inside the strip and keeps it solid ground at every scroll position.
+   The page is framed by a body gutter, so the awning cancels it to reach the
+   screen edges. Permanent, no state. */
+.pc-awning {
+  position: sticky;
+  top: -100px;
+  height: 106px;
+  flex: none;
+  z-index: 24;
+  background: var(--ground);
+  pointer-events: none;
+  margin: calc(var(--gutter) * -1) calc(var(--gutter) * -1) 0;
+}
+
+/* ---------- THE CONSTANT BAR ------------------------------------------
+   It used to sit at translateY(-101%) and slide in once an observer saw the
+   sentinel cross the top edge. That is reveal-on-scroll, and every bar in
+   this workspace that moved failed on a real device. It is now fixed from
+   first paint and never moves: 88% ground glass over blur, hairline under.
+   Do not reintroduce .is-on. */
 .pc-bar {
   position: fixed;
   inset: 0 0 auto 0;
@@ -588,14 +615,11 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   justify-content: space-between;
   gap: 20px;
   padding: 10px clamp(14px, 2.4vw, 30px);
-  background: rgba(20, 24, 27, 0.72);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  background-color: rgba(20, 24, 27, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--rule-dark);
-  transform: translateY(-101%);
-  transition: transform 0.55s var(--ease);
 }
-.pc-bar.is-on { transform: none; }
 .pc-bar__mark { color: var(--white); display: block; line-height: 0; }
 .pc-bar__mark svg { width: 58px; height: auto; }
 .pc-bar__mark svg g { fill: currentColor; }
@@ -682,7 +706,6 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .pc-bar { transition: none; }
   .pc-mass > span, .pc-row::after, .pc-grain { transition: none !important; transform: none !important; clip-path: none !important; opacity: 1; }
   .pc-card--hero { position: static; }
 }
