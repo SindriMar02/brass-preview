@@ -1,0 +1,40 @@
+import { readFileSync } from 'node:fs';
+import puppeteer from 'puppeteer-core';
+const CH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const b = await puppeteer.launch({ executablePath: CH, headless: 'new', args:['--no-sandbox'] });
+const p = await b.newPage();
+await p.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+await p.goto('http://localhost:8762/', { waitUntil: 'domcontentloaded' });
+const r = await p.evaluate(() => {
+  const out = {};
+  const load = document.querySelector('[data-load]');
+  const inner = load.querySelector('.pc-load__inner');
+  const svg = load.querySelector('svg');
+  const g = svg.querySelector('g');
+  const meter = load.querySelector('.pc-load__meter');
+  const num = load.querySelector('.pc-load__num');
+  const rect = e => { const b = e.getBoundingClientRect(); return {l:+b.left.toFixed(1), r:+b.right.toFixed(1), t:+b.top.toFixed(1), w:+b.width.toFixed(1), h:+b.height.toFixed(1), cx:+((b.left+b.right)/2).toFixed(1)}; };
+  out.viewport = { w: innerWidth, h: innerHeight, cx: innerWidth/2 };
+  out.inner = rect(inner);
+  out.svgBox = rect(svg);
+  out.meter = rect(meter);
+  out.num = rect(num);
+  // ink bbox of the traced paths, in svg user units
+  const bb = g.getBBox();
+  out.gBBox = {x:+bb.x.toFixed(1), y:+bb.y.toFixed(1), w:+bb.width.toFixed(1), h:+bb.height.toFixed(1)};
+  out.viewBox = svg.getAttribute('viewBox');
+  // where the ink actually lands on screen
+  const m = g.getScreenCTM();
+  const pt = (x,y) => { const P = svg.createSVGPoint(); P.x=x; P.y=y; const q = P.matrixTransform(m); return {x:+q.x.toFixed(1), y:+q.y.toFixed(1)}; };
+  const a = pt(bb.x, bb.y), c = pt(bb.x+bb.width, bb.y+bb.height);
+  out.inkOnScreen = { l: Math.min(a.x,c.x), r: Math.max(a.x,c.x), t: Math.min(a.y,c.y), b: Math.max(a.y,c.y) };
+  out.inkOnScreen.cx = +((out.inkOnScreen.l + out.inkOnScreen.r)/2).toFixed(1);
+  return out;
+});
+console.log(JSON.stringify(r, null, 2));
+console.log('\nviewport centre:', r.viewport.cx);
+console.log('svg element centre:', r.svgBox.cx, ' delta', (r.svgBox.cx - r.viewport.cx).toFixed(1));
+console.log('INK centre:', r.inkOnScreen.cx, ' delta', (r.inkOnScreen.cx - r.viewport.cx).toFixed(1));
+console.log('meter centre:', r.meter.cx, ' delta', (r.meter.cx - r.viewport.cx).toFixed(1));
+console.log('num centre:', r.num.cx, ' delta', (r.num.cx - r.viewport.cx).toFixed(1));
+await b.close();

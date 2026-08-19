@@ -79,7 +79,9 @@
       setTimeout(function () {
         loader.classList.add('is-done');
         open();
-        setTimeout(function () { loader.remove(); }, 1000);
+        /* the lift is 0.16s delay + 1s travel, so the node has to outlive
+           1160ms or it pops out from under its own transition */
+        setTimeout(function () { loader.remove(); }, 1300);
       }, 260);
     }
 

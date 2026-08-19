@@ -28,10 +28,10 @@ export const COPY = {
   ],
 
   hero: {
-    image: 'img/hero-front.jpg',
-    alt: 'Framhlið Brass við Laugaveg að kvöldi, tíglamynstur og ljós inni.',
-    /* the glass behind this already says BRASS KITCHEN & BAR in their own vinyl,
-       so the type says the thing the glass does not: when to come. */
+    image: 'img/hero-room.jpg',
+    alt: 'Barborðið á Brass með kökuskápnum, koparljós í loftinu.',
+    /* the lockup is already in the header, so the type here says the thing the
+       picture does not: when to come. */
     lines: ['Opið alla daga frá 14.', 'Happy hour til 18.'],
     fact: 'Laugavegur 66-68 · Eldhúsið lokar 21:30 · Morgunverður 07-10',
     secondary: 'Sjá matseðil',
@@ -234,15 +234,15 @@ export const COPY = {
       { image: 'img/cover.jpg', caption: 'Barinn.' },
       { image: 'img/burger.jpg', caption: 'Borgari úr 150 g rib eye.' },
       { image: 'img/hero-front.jpg', caption: 'Framhliðin við Laugaveg.' },
-      { image: 'img/buffet.jpg', caption: 'Salurinn lagður fyrir hóp.' },
-      { image: 'img/breakfast.jpg', caption: 'Morgunverður frá 07.' },
+      { image: 'img/barusalur.jpg', caption: 'Bárusalur lagður fyrir hóp.' },
+      { image: 'img/breakfast-buffet.jpg', caption: 'Morgunverður frá 07.' },
       { image: 'img/room-wide.jpg', caption: 'Hornið á Laugavegi.' },
     ],
   },
 
   room: {
-    image: 'img/buffet.jpg',
-    alt: 'Salurinn lagður fyrir hóp, hlaðborð á löngu borði.',
+    image: 'img/barusalur.jpg',
+    alt: 'Bárusalur lagður fyrir hóp, langborð og merki Brass á veggnum.',
     eyebrow: 'Bárusalur',
     lede: 'Bárusalur, fyrir hópa frá 10 manns.',
     fact: 'Hópmatseðill · info@brass.is · 519 6566',
@@ -256,8 +256,8 @@ export const COPY = {
     lede: 'Morgunverðarhlaðborð alla daga, 07:00 til 10:00.',
     body:
       'Brass er á jarðhæð Alda Hótel, svo morgunninn byrjar hér áður en eldhúsið opnar fyrir daginn klukkan 14:00.',
-    image: 'img/breakfast.jpg',
-    alt: 'Morgunverðarborð með pönnukökum, skyri, ávöxtum og kaffi.',
+    image: 'img/breakfast-buffet.jpg',
+    alt: 'Morgunverðarhlaðborðið á Brass, brauð, ávextir og álegg á eyju.',
   },
 
   find: {

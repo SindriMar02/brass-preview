@@ -100,7 +100,7 @@ a { color: inherit; }
 /* ---------- their lockup ------------------------------------------
    Traced off the vinyl on their own window, so it inherits colour. */
 .pc-lockup { display: block; color: currentColor; }
-.pc-lockup svg { width: clamp(74px, 7vw, 104px); height: auto; display: block; }
+.pc-lockup svg { width: clamp(64px, 6.03vw, 90px); height: auto; display: block; }
 .pc-lockup svg g { fill: currentColor; }
 
 /* ---------- A. photo card ----------------------------------------- */
@@ -118,15 +118,29 @@ a { color: inherit; }
   transform: scale(1.08);
   transition: transform 1.6s var(--ease);
 }
-.pc-card.is-in .pc-card__media { transform: scale(1); }
+.pc-card.is-in:not(.pc-card--hero) .pc-card__media { transform: scale(1); }
 
 .pc-card__scrim {
   position: absolute; inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(10,12,14,0.66) 0%, rgba(10,12,14,0.06) 32%),
+    /* the top band has to hold the chrome legible over a BRIGHT photograph too,
+       not just the dark ones: measured 3.26:1 on the Barusalur ceiling before
+       this was deepened. */
+    linear-gradient(to bottom, rgba(10,12,14,0.80) 0%, rgba(10,12,14,0.50) 18%, rgba(10,12,14,0.06) 36%),
     linear-gradient(to top,    rgba(10,12,14,0.90) 0%, rgba(10,12,14,0.06) 58%),
     linear-gradient(to right,  rgba(10,12,14,0.52) 0%, rgba(10,12,14,0) 58%);
+}
+
+/* The hero photograph is not uniformly dark the way the shopfront was: the lit
+   bottle shelf and the washed wall sit exactly where the marks row runs, and
+   the brightest pixels under that row measured 1.72:1 against the white type.
+   So the hero carries a deeper and longer top fall than the other cards. */
+.pc-card--hero .pc-card__scrim {
+  background:
+    linear-gradient(to bottom, rgba(10,12,14,0.86) 0%, rgba(10,12,14,0.58) 23%, rgba(10,12,14,0.06) 46%),
+    linear-gradient(to top,    rgba(10,12,14,0.92) 0%, rgba(10,12,14,0.08) 60%),
+    linear-gradient(to right,  rgba(10,12,14,0.55) 0%, rgba(10,12,14,0) 62%);
 }
 
 .pc-card__inner {
@@ -406,7 +420,7 @@ a { color: inherit; }
 .pc-foot a { text-decoration: none; }
 .pc-foot a:hover { color: var(--white); }
 .pc-foot__mark { color: var(--white); }
-.pc-foot__mark .pc-lockup svg { width: clamp(96px, 9vw, 132px); }
+.pc-foot__mark .pc-lockup svg { width: clamp(83px, 7.75vw, 114px); }
 
 /* ---------- mobile ----------------------------------------------------- */
 @media (max-width: 900px) {
@@ -460,6 +474,20 @@ a { color: inherit; }
       to   { clip-path: inset(0 0 0 0); }
     }
 
+    /* the journey line, scrubbed rather than stepped. An animation beats a
+       normal declaration, so this simply takes over from the [data-active]
+       rules above wherever timelines are supported. */
+    .pc-pin { view-timeline: --pc-journey block; }
+    .pc-pin__railfill {
+      animation: pc-journey linear both;
+      animation-timeline: --pc-journey;
+      animation-range: contain 0% contain 100%;
+    }
+    @keyframes pc-journey {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
     .pc-foot__mark {
       animation: pc-liftmark linear both;
       animation-timeline: view();
@@ -511,7 +539,13 @@ main > section[aria-labelledby] { margin-left: var(--gutter); margin-right: var(
 main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 
 /* ---------- opening sequence -------------------------------------- */
-.pc-card--hero .pc-card__media { transform: scale(1.14); transition: transform 2.2s var(--ease); }
+.pc-card--hero .pc-card__media {
+  transform: scale(1.14);
+  /* not the house expo ease here: expo is front-loaded, so the drift would be
+     86% spent by the time the curtain uncovers it. A cubic keeps the picture
+     visibly settling for a beat after the reveal. */
+  transition: transform 2.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.16s;
+}
 .is-ready .pc-card--hero .pc-card__media { transform: scale(1); }
 
 .pc-card--hero .pc-chrome,
@@ -521,9 +555,9 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   transform: translateY(10px);
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
-.is-ready .pc-card--hero .pc-chrome     { opacity: 1; transform: none; transition-delay: 0.15s; }
-.is-ready .pc-card--hero .pc-hero__marks{ opacity: 1; transform: none; transition-delay: 0.3s; }
-.is-ready .pc-card--hero .pc-hero__row  { opacity: 1; transform: none; transition-delay: 0.95s; }
+.is-ready .pc-card--hero .pc-chrome     { opacity: 1; transform: none; transition-delay: 0.88s; }
+.is-ready .pc-card--hero .pc-hero__marks{ opacity: 1; transform: none; transition-delay: 0.80s; }
+.is-ready .pc-card--hero .pc-hero__row  { opacity: 1; transform: none; transition-delay: 0.58s; }
 
 /* the mass lines rise one after the other */
 .pc-mass { clip-path: none; transform: none; transition: none; }
@@ -535,8 +569,11 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 }
 .pc-mass > span:nth-of-type(2) { transition-delay: 0.12s; }
 .pc-mass > span:nth-of-type(3) { transition-delay: 0.24s; }
+.is-ready .pc-card--hero .pc-mass > span                   { transition-delay: 0.66s; }
+.is-ready .pc-card--hero .pc-mass > span:nth-of-type(2)    { transition-delay: 0.78s; }
+.is-ready .pc-card--hero .pc-mass > span:nth-of-type(3)    { transition-delay: 0.90s; }
 .is-ready .pc-card--hero .pc-mass > span,
-.pc-card.is-in .pc-mass > span,
+.pc-card.is-in:not(.pc-card--hero) .pc-mass > span,
 .pc-sheet.is-in .pc-mass > span { clip-path: inset(0 0 -0.22em 0); transform: none; }
 
 .pc-sentinel { height: 1px; margin: 0; }
@@ -675,11 +712,23 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   place-items: end start;
   padding: clamp(24px, 5vw, 76px);
   background: var(--ground);
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  transform: translateY(0);
+  will-change: transform;
 }
-.is-loading .pc-load { display: grid; }
-.pc-load.is-done { clip-path: inset(0 0 100% 0); pointer-events: none; }
+/* The curtain has to survive its own exit. `is-loading` is what gives it a
+   display, and the script drops that class on the same frame it adds
+   `is-done`, so gating display on `is-loading` alone made the curtain hit
+   display:none mid-transition: a hard cut, never a wipe. It keeps its display
+   until the script removes the element a second later. */
+.is-loading .pc-load,
+.pc-load.is-done { display: grid; }
+/* it lifts away rather than being clipped: a moving edge the eye can follow,
+   and a transform the compositor can carry on its own. */
+.pc-load.is-done {
+  transform: translateY(-101%);
+  transition: transform 1s cubic-bezier(0.83, 0, 0.17, 1) 0.16s;
+  pointer-events: none;
+}
 
 .pc-load__inner { width: min(560px, 100%); }
 .pc-load__mark { display: block; color: var(--white); }
@@ -702,18 +751,19 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 .pc-load__row { display: flex; justify-content: space-between; gap: 20px; color: var(--white-soft); }
 .pc-load__row [data-load-num] { font-variant-numeric: tabular-nums; }
 
-/* the mark leaves before the curtain does */
+/* the mark clears out first, inside the 0.16s before the curtain moves, so
+   the lift is never carrying a logo up the screen with it */
 .pc-load.is-done .pc-load__inner {
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
+  transform: translateY(-14px);
+  transition: opacity 0.34s var(--ease), transform 0.44s var(--ease);
 }
 
 /* nothing behind the curtain moves until the curtain is gone */
 .is-loading main, .is-loading .pc-bar { visibility: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
-  .pc-load { transition: none; }
+  .pc-load, .pc-load.is-done { transition: none; }
   .pc-load.is-done { display: none; }
 }
 
@@ -891,6 +941,40 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 /* the switch itself: three names, one lit */
 .pc-pin__count { color: var(--white-soft); margin-bottom: clamp(14px, 2vw, 26px); }
 .pc-pin__count [data-count] { color: var(--accent); }
+
+/* ---------- the scroll journey through the courses -------------------
+   A line under the counter that fills as you travel the pinned section, so
+   you can see how much of the menu is still ahead of you. The section is
+   ~462svh and the stage is pinned for 362 of that, which is exactly the
+   `contain` range of a view-timeline on the section: contain 0% is the frame
+   the stage pins, contain 100% the frame it lets go.
+
+   The fill is deliberately NOT notched into thirds. The courses do not hand
+   over at 33/66: the observer switches them when a spacer crosses the middle
+   of the viewport, and that measures out at 0%, 42% and 70% of the travel. A
+   notch at a third would point at nothing. The count and the lit title say
+   which course; this line only says how far. */
+.pc-pin__rail {
+  position: relative;
+  width: min(240px, 100%);
+  height: 2px;
+  margin: 0 0 clamp(16px, 2.2vw, 28px);
+  background: rgba(247, 245, 241, 0.18);
+}
+.pc-pin__railfill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.6s var(--ease);
+}
+/* Fallback, and the reduced-motion path: the observer already knows which
+   course is up, so the line steps instead of scrubbing. */
+.pc-pin__stage[data-active="0"] .pc-pin__railfill { transform: scaleX(0.333); }
+.pc-pin__stage[data-active="1"] .pc-pin__railfill { transform: scaleX(0.667); }
+.pc-pin__stage[data-active="2"] .pc-pin__railfill { transform: scaleX(1); }
+
 .pc-pin__titles { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(6px, 1vw, 14px); }
 .pc-pin__title {
   opacity: 0.26;
@@ -956,6 +1040,9 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .pc-pin__stage { position: static; height: auto; }
   .pc-pin__step { display: none; }
+  /* nothing is pinned here and all three courses are stacked, so a progress
+     line would only ever sit frozen at one third. */
+  .pc-pin__rail { display: none; }
   .pc-pin__body { grid-template-columns: minmax(0, 1fr); }
   .pc-pin__panels { position: static; display: grid; gap: var(--gutter); }
   .pc-pin__panel { position: static; opacity: 1; transform: none; pointer-events: auto; }
@@ -1025,7 +1112,7 @@ main > *:not(.pc-card--hero) { position: relative; z-index: 1; }
   text-align: center;
 }
 .pc-load__mark { display: grid; justify-items: center; }
-.pc-load__mark .pc-lockup svg { width: clamp(104px, 12vw, 140px); }
+.pc-load__mark .pc-lockup svg { width: clamp(90px, 10.3vw, 121px); }
 .pc-load__meter {
   width: min(240px, 60vw);
   margin: clamp(26px, 3.4vw, 40px) 0 14px;

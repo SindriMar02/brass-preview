@@ -257,6 +257,7 @@ ${sheet({
             <p class="pc-label pc-pin__count">
               <span data-count>01</span> / ${String(copy.menu.sections.length).padStart(2, '0')}
             </p>
+            <div class="pc-pin__rail" aria-hidden="true"><span class="pc-pin__railfill"></span></div>
             <ol class="pc-pin__titles">
               ${copy.menu.sections
                 .map(
@@ -370,7 +371,7 @@ ${sheet({
       <div class="pc-menu__head"><h3 class="pc-menu__title">opið</h3></div>
       <div>${rows(copy.find.hours.map((h) => ({ name: h.term, note: h.en, price: h.detail })))}</div>
     </div>
-    <div class="pc-menu">
+    <div class="pc-menu" id="morgunverdur">
       <div class="pc-menu__head"><h3 class="pc-menu__title">${esc(copy.breakfast.eyebrow)}</h3></div>
       <div>
         <p class="pc-body">${esc(copy.breakfast.body)}</p>
